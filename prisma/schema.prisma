@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Forecast {
+  id                Int       @id @default(autoincrement())
+  name              String    @unique
+  category          String
+  balance           Decimal   @db.Decimal(15, 2)
+  debt              Decimal   @db.Decimal(15, 2)
+  forecast          Decimal   @db.Decimal(15, 2)
+  last_topup        Decimal?  @db.Decimal(15, 2)
+  last_topup_at     DateTime?
+  last_widthdraw    Decimal?  @db.Decimal(15, 2)
+  last_widthdraw_at DateTime?
+  update_at         DateTime
+  events            Event[]
+}
+
+model Event {
+  id         Int      @id @default(autoincrement())
+  action     String
+  amount     Decimal  @db.Decimal(15, 2)
+  create_at  DateTime
+  user       String
+  comments   String?
+  forecast   Forecast @relation(fields: [forecastId], references: [id])
+  forecastId Int
+
+  @@index([forecastId])
+}
