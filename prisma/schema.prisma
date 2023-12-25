@@ -27,14 +27,14 @@ model Forecast {
 }
 
 model Event {
-  id         Int      @id @default(autoincrement())
-  action     String
-  amount     Decimal  @db.Decimal(15, 2)
-  create_at  DateTime
-  user       String
-  comments   String?
-  forecast   Forecast @relation(fields: [forecastId], references: [id])
-  forecastId Int
+  id          Int      @id @default(autoincrement())
+  action      String
+  amount      Decimal  @db.Decimal(15, 2)
+  create_at   DateTime
+  user        String
+  comments    String?
+  forecast    Forecast @relation(fields: [forecast_id], references: [id])
+  forecast_id Int
 
-  @@index([forecastId])
+  @@index([forecast_id])
 }

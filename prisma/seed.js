@@ -4,6 +4,8 @@ const prisma = new PrismaClient();
 
 const load = async () => {
   try {
+    await prisma.event.deleteMany();
+    console.log('Deleted records in event table');
     await prisma.forecast.deleteMany();
     console.log('Deleted records in forecast table');
     await prisma.$queryRaw`ALTER TABLE Forecast AUTO_INCREMENT = 1`;
