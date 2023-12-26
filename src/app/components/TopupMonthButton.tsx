@@ -1,25 +1,13 @@
 'use client';
 import React from 'react';
 
-import { Button, message } from 'antd';
+import { Button } from 'antd';
 import { client } from '../service/client';
 import { useMutation } from '@tanstack/react-query';
+import { useMessager } from '../hooks/useMessager';
 
 export default function TopupMonthButton() {
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const handleSuccess = () => {
-    messageApi.open({
-      type: 'success',
-      content: 'Success!',
-    });
-  };
-  const handleError = () => {
-    messageApi.open({
-      type: 'error',
-      content: 'Something went wrong',
-    });
-  };
+  const { contextHolder, handleError, handleSuccess } = useMessager();
 
   const { isPending, mutate } = useMutation({
     mutationFn: async () => await client.patch('topup-month'),
@@ -31,10 +19,13 @@ export default function TopupMonthButton() {
     <>
       {contextHolder}
       <Button
-        color="warning"
+        danger
         onClick={() => mutate()}
         loading={isPending}
+        disabled={isPending}
+        type="primary"
         block
+        size="large"
       >
         Topup the Month
       </Button>

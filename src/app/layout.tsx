@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <UserProvider>
           <Providers>
-            <main className="container mx-auto bg-sky-200 w-full flex flex-col justify-between h-full text-gray-700">
+            <main className="container mx-auto bg-black w-full flex flex-col justify-between h-full text-gray-700 pb-[84px]">
               {children}
               <BottomNav />
             </main>
