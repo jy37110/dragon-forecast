@@ -26,6 +26,7 @@ export default function TopupMonthButton() {
         type="primary"
         block
         size="large"
+        style={{ borderRadius: 0 }}
       >
         Topup the Month
       </Button>

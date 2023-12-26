@@ -2,13 +2,10 @@ import Link from 'next/link';
 import React from 'react';
 import { NextPage } from 'next';
 
-import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 const DashboardPage: NextPage = withPageAuthRequired(
   async () => {
-    const session = await getSession();
-    console.log(session);
-
     return (
       <div className="flex flex-col justify-center items-center h-full">
         <h2>Dashboard</h2>
