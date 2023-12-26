@@ -60,7 +60,6 @@ export default function ForecastTable({ forecasts }: ForecastTableProps) {
   return (
     <div className="w-full">
       <Table
-        style={{ borderRadius: '10px' }}
         columns={columns}
         dataSource={forecasts}
         rowKey={(record) => record.id}

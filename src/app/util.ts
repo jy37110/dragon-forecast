@@ -1,4 +1,5 @@
-import { Forecast } from '@prisma/client';
+import { Forecast, Event } from '@prisma/client';
+import { FullEvent } from './type';
 
 interface GroupedForecast {
   value: string;
@@ -49,4 +50,12 @@ export const getMoney = (value: number | string | undefined): string => {
   } else {
     return '';
   }
+};
+
+export const formatFullEvent = (
+  events: Event & { forecast: Forecast }[]
+): FullEvent[] => {
+  return events.map((event) => {
+    return { ...event.forecast, ...event } as FullEvent;
+  });
 };

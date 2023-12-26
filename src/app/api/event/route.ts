@@ -63,4 +63,23 @@ const postHandler = async (request: Request) => {
   }
 };
 
+const getHandler = async () => {
+  try {
+    const events = await prisma.event.findMany({
+      include: { forecast: true },
+      take: 1000,
+      orderBy: { id: 'desc' },
+    });
+
+    return new Response(JSON.stringify(events), {
+      status: 200,
+    });
+  } catch (e) {
+    console.log(e);
+    const error = e as Error;
+    return new Response(error.message, { status: 500 });
+  }
+};
+
 export const POST = withApiAuthRequired(postHandler);
+export const GET = withApiAuthRequired(getHandler);

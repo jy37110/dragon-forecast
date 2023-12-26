@@ -22,18 +22,18 @@ interface ActionFormProps {
   onClose: () => void;
 }
 
-enum ActionType {
+export enum ActionType {
   widthdraw = 'widthdraw',
   topup = 'topup',
 }
 
 const { TextArea } = Input;
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
+  wrapperCol: { offset: 6, span: 18 },
 };
 
 export default function ActionFormModal({
@@ -95,11 +95,11 @@ export default function ActionFormModal({
           autoComplete="off"
           onFinish={onFinish}
           form={form}
-          className="flex flex-col gap-y-2 h-full"
+          className="flex flex-col h-full"
           initialValues={initialValues}
           {...layout}
         >
-          <Form.Item hidden name="forecast_id">
+          <Form.Item hidden name="forecast_id" className="mb-3">
             <Input />
           </Form.Item>
 
@@ -107,6 +107,7 @@ export default function ActionFormModal({
             label="Action Type"
             name="action"
             rules={[{ required: true, message: 'Please select an action!' }]}
+            className="mb-3"
           >
             <Radio.Group value={ActionType.widthdraw}>
               <Radio value={ActionType.widthdraw}>Widthdraw</Radio>
@@ -118,6 +119,7 @@ export default function ActionFormModal({
             label="Amount"
             name="amount"
             rules={[{ required: true, message: 'Please type an amount!' }]}
+            className="mb-3"
           >
             <InputNumber
               prefix="$"
@@ -127,15 +129,15 @@ export default function ActionFormModal({
             />
           </Form.Item>
 
-          <Form.Item label="Date" name="create_at">
-            <DatePicker />
+          <Form.Item label="Date" name="create_at" className="mb-3">
+            <DatePicker style={{ width: '100%' }} />
           </Form.Item>
 
-          <Form.Item label="Comments" name="comments">
+          <Form.Item label="Comments" name="comments" className="mb-3">
             <TextArea rows={4} />
           </Form.Item>
 
-          <Form.Item label="user" hidden name="user">
+          <Form.Item label="user" hidden name="user" className="mb-3">
             <Input />
           </Form.Item>
 

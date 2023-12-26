@@ -19,6 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <meta name="viewport" content="minimum-scale=1" />
       <body className={inter.className}>
         <UserProvider>
           <Providers>
