@@ -16,7 +16,11 @@ const navItems = [
     key: '/dashboard',
     render: (isActive: boolean) => {
       return (
-        <Link href="/dashboard" className="text-white no-underline">
+        <Link
+          href="/dashboard"
+          className="text-white no-underline"
+          key="/dashboard"
+        >
           <div className="flex flex-col gap-y-[6px] items-center justify-center">
             {isActive ? (
               <DashboardFilled className="text-[24px]" />
@@ -35,7 +39,7 @@ const navItems = [
     key: '/action',
     render: (isActive: boolean) => {
       return (
-        <Link href="/action" className="text-white no-underline">
+        <Link href="/action" className="text-white no-underline" key="/action">
           <div className="flex flex-col gap-y-[6px] items-center justify-center">
             {isActive ? (
               <CalculatorFilled className="text-[24px]" />
@@ -54,7 +58,7 @@ const navItems = [
     key: '/events',
     render: (isActive: boolean) => {
       return (
-        <Link href="/events" className="text-white no-underline">
+        <Link href="/events" className="text-white no-underline" key="/events">
           <div className="flex flex-col gap-y-[4px] items-center justify-center">
             {isActive ? (
               <CodeFilled className="text-[24px]" />

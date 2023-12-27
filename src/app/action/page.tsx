@@ -13,7 +13,7 @@ const ActionPage: NextPage = withPageAuthRequired(
     const forecasts = await getForecast(cookieStore.toString());
 
     return (
-      <div className="flex flex-col justify-center items-center h-full w-full p-[24px] max-sm:p-[0px] gap-y-5">
+      <div className="flex flex-col justify-center items-center h-full w-full gap-y-6 py-6">
         <ForecastTable forecasts={forecasts.data} />
         <TopupMonthButton />
       </div>

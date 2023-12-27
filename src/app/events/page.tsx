@@ -14,7 +14,7 @@ const EventsPage: NextPage = withPageAuthRequired(
     const eventsView = formatFullEvent(events.data);
 
     return (
-      <div className="flex flex-col justify-center items-center h-full w-full p-[24px] max-sm:p-[0px] gap-y-5">
+      <div className="flex flex-col justify-center items-center h-full w-full gap-y-6 py-6">
         <EventsTable events={eventsView} />
       </div>
     );
