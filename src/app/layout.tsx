@@ -4,7 +4,10 @@ import './globals.css';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import BottomNav from './components/BottomNav';
 import Providers from './providers';
+import LocalizedFormat from 'dayjs/plugin/localizedFormat';
+import dayjs from 'dayjs';
 
+dayjs.extend(LocalizedFormat);
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -23,7 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <UserProvider>
           <Providers>
-            <main className="container mx-auto bg-black w-full flex flex-col justify-between h-full text-white pb-[104px]">
+            <main className="container mx-auto bg-gray-600 w-full flex flex-col justify-between h-full text-white pb-[104px]">
               {children}
               <BottomNav />
             </main>
