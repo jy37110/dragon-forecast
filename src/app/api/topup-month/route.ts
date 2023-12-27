@@ -20,22 +20,24 @@ const patchHandler = async () => {
 
       await prisma.event.createMany({ data: events });
 
-      forecasts.forEach(async (forecast) => {
-        const updatedForecast = {
-          ...forecast,
-          balance: forecast.balance.add(forecast.forecast),
-          last_topup: forecast.forecast,
-          last_topup_at: new Date(),
-          update_at: new Date(),
-        };
+      await Promise.all(
+        forecasts.map(async (forecast) => {
+          const updatedForecast = {
+            ...forecast,
+            balance: forecast.balance.add(forecast.forecast),
+            last_topup: forecast.forecast,
+            last_topup_at: new Date(),
+            update_at: new Date(),
+          };
 
-        await prisma.forecast.update({
-          where: {
-            id: updatedForecast.id,
-          },
-          data: updatedForecast,
-        });
-      });
+          await prisma.forecast.update({
+            where: {
+              id: updatedForecast.id,
+            },
+            data: updatedForecast,
+          });
+        })
+      );
     }
     return new Response('Topup success', {
       status: 200,

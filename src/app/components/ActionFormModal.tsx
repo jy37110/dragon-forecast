@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
   Button,
   DatePicker,
@@ -8,7 +8,6 @@ import {
   Input,
   InputNumber,
   Radio,
-  Space,
 } from 'antd';
 import { Forecast } from '@prisma/client';
 import dayjs from 'dayjs';
@@ -47,7 +46,7 @@ export default function ActionFormModal({
   const formRef = useRef(null);
   const { contextHolder, handleError, handleSuccess } = useMessager();
 
-  const { isPending, mutate } = useMutation({
+  const { isPending, mutateAsync } = useMutation({
     mutationFn: async (event: Event) =>
       await client.post('event', { data: event }),
     onSuccess: handleSuccess,
@@ -69,8 +68,9 @@ export default function ActionFormModal({
     }
   }, [forecast, form]);
 
-  const onFinish = (values: any) => {
-    mutate(values);
+  const onFinish = async (values: any) => {
+    await mutateAsync(values);
+    onClose();
   };
 
   return (

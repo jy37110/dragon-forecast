@@ -57,6 +57,7 @@ export default function ForecastTable({ forecasts }: ForecastTableProps) {
       sorter: (a, b) => Number(a.forecast) - Number(b.forecast),
     },
   ];
+
   return (
     <div className="w-full">
       <Table

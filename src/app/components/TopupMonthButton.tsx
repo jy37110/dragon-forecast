@@ -11,6 +11,12 @@ export default function TopupMonthButton() {
   const { contextHolder, handleError, handleSuccess } = useMessager();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: async () => await client.patch('topup-month'),
+    onSuccess: handleSuccess,
+    onError: handleError,
+  });
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -23,12 +29,6 @@ export default function TopupMonthButton() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const { isPending, mutate, mutateAsync } = useMutation({
-    mutationFn: async () => await client.patch('topup-month'),
-    onSuccess: handleSuccess,
-    onError: handleError,
-  });
 
   const confirmModalProps = {
     showModal,

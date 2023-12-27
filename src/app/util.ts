@@ -1,6 +1,9 @@
 import { Forecast, Event } from '@prisma/client';
 import { FullEvent } from './type';
 
+const INITIAL_DEBT_FIX = 6000 - 136 - 160 - 500;
+const APP_RELEASE_DISCREPANCY = 835.94;
+
 interface GroupedForecast {
   value: string;
   title: string;
@@ -58,4 +61,41 @@ export const formatFullEvent = (
   return events.map((event) => {
     return { ...event.forecast, ...event } as FullEvent;
   });
+};
+
+function sumByKey<T extends Forecast>(array: T[], key: keyof T): number {
+  return array.reduce((acc, obj) => acc + Number(obj[key]), 0);
+}
+
+const getMonthlyTopUp = (forecasts: Forecast[]): number => {
+  return sumByKey(forecasts, 'forecast');
+};
+
+const getTotalBalance = (forecasts: Forecast[]): number => {
+  return sumByKey(forecasts, 'balance');
+};
+
+const getInitialDebt = (forecasts: Forecast[]): number => {
+  return sumByKey(forecasts, 'debt');
+};
+
+const getInitialActialDebt = (forecasts: Forecast[]): number => {
+  return getInitialDebt(forecasts) - INITIAL_DEBT_FIX;
+};
+
+const getShouldHaveBalance = (forecasts: Forecast[]): number => {
+  return (
+    getTotalBalance(forecasts) -
+    getInitialActialDebt(forecasts) -
+    APP_RELEASE_DISCREPANCY
+  );
+};
+
+export const sumaryForecast = (forecasts: Forecast[]): number[] => {
+  return [
+    getMonthlyTopUp(forecasts),
+    getTotalBalance(forecasts),
+    getInitialActialDebt(forecasts),
+    getShouldHaveBalance(forecasts),
+  ];
 };
