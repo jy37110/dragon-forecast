@@ -12,7 +12,6 @@ const EventsPage: NextPage = withPageAuthRequired(
     const cookieStore = cookies();
     const events = await getEvents(cookieStore.toString());
     const eventsView = formatFullEvent(events.data);
-    console.log(eventsView);
 
     return (
       <div className="flex flex-col justify-center items-center h-full w-full p-[24px] max-sm:p-[0px] gap-y-5">

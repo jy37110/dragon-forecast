@@ -10,6 +10,7 @@
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@auth0/auth0-react": "^2.2.4",
     "@auth0/nextjs-auth0": "^3.5.0",
     "@prisma/client": "^5.7.1",

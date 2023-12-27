@@ -8,6 +8,7 @@ import {
   Input,
   InputNumber,
   Radio,
+  Space,
 } from 'antd';
 import { Forecast } from '@prisma/client';
 import dayjs from 'dayjs';
@@ -142,9 +143,17 @@ export default function ActionFormModal({
           </Form.Item>
 
           <Form.Item {...tailLayout}>
-            <Button htmlType="submit" loading={isPending} disabled={isPending}>
-              Submit
-            </Button>
+            <div className="flex gap-x-4">
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={isPending}
+                disabled={isPending}
+              >
+                Submit
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </div>
           </Form.Item>
         </Form>
         {contextHolder}

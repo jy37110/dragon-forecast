@@ -1,7 +1,7 @@
 'use client';
 import { Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React from 'react';
 import { getMoney } from '../util';
 import dayjs from 'dayjs';
 import { FullEvent } from '../type';
@@ -12,12 +12,6 @@ interface EventsTableProps {
 }
 
 export default function EventsTable({ events }: EventsTableProps) {
-  const [selectedRow, setSelectedRow] = useState<FullEvent | undefined>();
-
-  const closeModal = () => {
-    setSelectedRow(undefined);
-  };
-
   const columns: ColumnsType<FullEvent> = [
     {
       title: '#',
@@ -70,6 +64,12 @@ export default function EventsTable({ events }: EventsTableProps) {
       sorter: (a, b) =>
         dayjs(a.create_at).isBefore(dayjs(b.create_at)) ? 0 : 1,
     },
+    {
+      title: 'Comments',
+      dataIndex: 'comments',
+      key: 'comments',
+      responsive: ['lg'],
+    },
   ];
   return (
     <div className="w-full">
@@ -79,19 +79,7 @@ export default function EventsTable({ events }: EventsTableProps) {
         dataSource={events}
         rowKey={(record) => record.id}
         pagination={false}
-        onRow={(record) => {
-          return {
-            onClick: (event) => {
-              setSelectedRow(record);
-            },
-          };
-        }}
       />
-      {/* <ActionFormModal
-        onClose={closeModal}
-        forecast={selectedRow}
-        open={selectedRow !== undefined}
-      /> */}
     </div>
   );
 }
