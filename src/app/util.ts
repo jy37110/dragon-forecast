@@ -1,8 +1,9 @@
-import { Forecast, Event } from '@prisma/client';
+import { Forecast, Event, Period } from '@prisma/client';
 import { FullEvent } from './type';
 
 const INITIAL_DEBT_FIX = 6000 - 136 - 160 - 500;
-const APP_RELEASE_DISCREPANCY = 835.94;
+
+const APP_RELEASE_DISCREPANCY = 835.94; //Last event record: Kelly Club	withdraw	60	2023-12-13T00:00:00.000Z
 
 interface GroupedForecast {
   value: string;
@@ -67,7 +68,7 @@ function sumByKey<T extends Forecast>(array: T[], key: keyof T): number {
   return array.reduce((acc, obj) => acc + Number(obj[key]), 0);
 }
 
-const getMonthlyTopUp = (forecasts: Forecast[]): number => {
+export const getMonthlyTopUp = (forecasts: Forecast[]): number => {
   return sumByKey(forecasts, 'forecast');
 };
 
@@ -98,4 +99,11 @@ export const sumaryForecast = (forecasts: Forecast[]): number[] => {
     getInitialActialDebt(forecasts),
     getShouldHaveBalance(forecasts),
   ];
+};
+
+export const getPeriodState = (period: Period | undefined | null): number => {
+  if (period === null || period === undefined) return 0;
+  return Number(
+    Number(period.committed_topup_amount) - Number(period.actual_topup_amount)
+  );
 };

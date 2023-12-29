@@ -19,7 +19,7 @@ const EventsPage: NextPage = withPageAuthRequired(
       </div>
     );
   },
-  { returnTo: '/login' }
+  { returnTo: '/api/auth/login' }
 );
 
 export default EventsPage;

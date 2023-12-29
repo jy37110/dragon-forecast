@@ -1,6 +1,9 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { prisma } from '../../../../prisma/prisma';
 import dayjs from 'dayjs';
+import { getMonthlyTopUp } from '@/app/util';
+import { Decimal } from '@prisma/client/runtime/library';
+import { Period } from '@prisma/client';
 
 const patchHandler = async () => {
   try {
@@ -26,6 +29,14 @@ const patchHandler = async () => {
           forecast_id: forecast.id,
         };
       });
+
+      const period = {
+        start: updateDate,
+        committed_topup_amount: new Decimal(getMonthlyTopUp(forecasts)),
+        actual_topup_amount: new Decimal(0),
+      };
+
+      await prisma.period.create({ data: period });
 
       await prisma.event.createMany({ data: events });
 

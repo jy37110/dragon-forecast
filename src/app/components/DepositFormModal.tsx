@@ -1,34 +1,13 @@
-'use client';
+import { Button, DatePicker, Drawer, Form, Input, InputNumber } from 'antd';
 import React, { FocusEventHandler, useEffect, useMemo, useRef } from 'react';
-import {
-  Button,
-  DatePicker,
-  Drawer,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-} from 'antd';
-import { Forecast } from '@prisma/client';
-import dayjs from 'dayjs';
+import { useMessager } from '../hooks/useMessager';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import dayjs from 'dayjs';
+import { ActionType } from './ActionFormModal';
+import TextArea from 'antd/es/input/TextArea';
 import { useMutation } from '@tanstack/react-query';
 import { client } from '../service/client';
-import { useMessager } from '../hooks/useMessager';
 
-interface ActionFormProps {
-  forecast: Forecast | undefined;
-  open: boolean;
-  onClose: () => void;
-}
-
-export enum ActionType {
-  widthdraw = 'widthdraw',
-  topup = 'topup',
-  deposit = 'deposit',
-}
-
-const { TextArea } = Input;
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 18 },
@@ -37,13 +16,17 @@ const tailLayout = {
   wrapperCol: { offset: 6, span: 18 },
 };
 
-export default function ActionFormModal({
-  forecast,
+interface DepositFormModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export default function DepositFormModal({
   open,
   onClose,
-}: ActionFormProps) {
-  const [form] = Form.useForm();
+}: DepositFormModalProps) {
   const { user } = useUser();
+  const [form] = Form.useForm();
   const formRef = useRef(null);
   const { contextHolder, handleError, handleSuccess } = useMessager();
 
@@ -56,18 +39,18 @@ export default function ActionFormModal({
 
   const initialValues = useMemo(() => {
     return {
-      action: ActionType.widthdraw,
+      action: ActionType.deposit,
       create_at: dayjs(),
       user: user?.email,
-      forecast_id: forecast?.id,
+      comments: null,
     };
-  }, [forecast?.id, user?.email]);
+  }, [user?.email]);
 
   useEffect(() => {
     if (formRef.current) {
       form.resetFields();
     }
-  }, [forecast, form]);
+  }, [form, open]);
 
   const onFinish = async (values: any) => {
     await mutateAsync(values);
@@ -95,9 +78,7 @@ export default function ActionFormModal({
       contentWrapperStyle={{ paddingLeft: '5%', paddingRight: '5%' }}
     >
       <div className="flex flex-col gap-y-5">
-        <h2 className="text-black font-bold">
-          #{forecast?.id} - {forecast?.name}
-        </h2>
+        <h2 className="text-black font-bold">Header</h2>
         <Form
           ref={formRef}
           size="large"
@@ -108,20 +89,8 @@ export default function ActionFormModal({
           initialValues={initialValues}
           {...layout}
         >
-          <Form.Item hidden name="forecast_id" className="mb-3">
+          <Form.Item hidden name="action" className="mb-3">
             <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Action Type"
-            name="action"
-            rules={[{ required: true, message: 'Please select an action!' }]}
-            className="mb-3"
-          >
-            <Radio.Group value={ActionType.widthdraw}>
-              <Radio value={ActionType.widthdraw}>Widthdraw</Radio>
-              <Radio value={ActionType.topup}>Top Up</Radio>
-            </Radio.Group>
           </Form.Item>
 
           <Form.Item
