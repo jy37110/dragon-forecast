@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { getForecast } from '../service/getForecast';
 import SummaryCard from '../components/SummaryCard';
 import { getPeriod } from '../service/getPeriod';
+import SepensesSummaryCard from '../components/SpensesSummaryCard';
 
 const DashboardPage: NextPage = withPageAuthRequired(
   async () => {
@@ -14,10 +15,11 @@ const DashboardPage: NextPage = withPageAuthRequired(
     const period = await getPeriod(cookieStore.toString());
 
     return (
-      <div className="h-full w-full gap-y-6 py-6 ">
+      <div className="h-full w-full gap-y-6 py-6 flex flex-col">
         {forecasts && period && (
           <SummaryCard forecasts={forecasts.data} period={period.data} />
         )}
+        {forecasts && <SepensesSummaryCard forecasts={forecasts.data} />}
       </div>
     );
   },

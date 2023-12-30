@@ -20,3 +20,10 @@ export type FullEvent = {
   comments: string | null;
   forecast_id: number;
 };
+
+export type GroupedForecast = {
+  category: string;
+  forecasts: Forecast[];
+  forecastSum: number;
+  percentage: number;
+};

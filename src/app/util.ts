@@ -1,45 +1,9 @@
 import { Forecast, Event, Period } from '@prisma/client';
-import { FullEvent } from './type';
+import { FullEvent, GroupedForecast } from './type';
 
 const INITIAL_DEBT_FIX = 6000 - 136 - 160 - 500;
 
 const APP_RELEASE_DISCREPANCY = 835.94; //Last event record: Kelly Club	withdraw	60	2023-12-13T00:00:00.000Z
-
-interface GroupedForecast {
-  value: string;
-  title: string;
-  children: {
-    value: number;
-    title: string;
-    obj: Forecast;
-  }[];
-}
-
-export const groupForecastsByCategory = (
-  forecasts: Forecast[]
-): GroupedForecast[] => {
-  const groupedForecasts: Record<string, GroupedForecast> = {};
-
-  forecasts.forEach((forecast) => {
-    const { id, name, category } = forecast;
-
-    if (!groupedForecasts[category]) {
-      groupedForecasts[category] = {
-        value: category,
-        title: category,
-        children: [],
-      };
-    }
-
-    groupedForecasts[category].children.push({
-      value: id,
-      title: name,
-      obj: forecast,
-    });
-  });
-
-  return Object.values(groupedForecasts);
-};
 
 export const getMoney = (value: number | string | undefined): string => {
   if (value === undefined) {
@@ -107,3 +71,42 @@ export const getPeriodState = (period: Period | undefined | null): number => {
     Number(period.committed_topup_amount) - Number(period.actual_topup_amount)
   );
 };
+
+export function groupForecastsByCategory(
+  forecasts: Forecast[]
+): GroupedForecast[] {
+  const groupedForecasts: { [category: string]: Forecast[] } = {};
+  const total = sumByKey(forecasts, 'forecast');
+
+  forecasts.forEach((forecast) => {
+    const { category } = forecast;
+    if (!groupedForecasts[category]) {
+      groupedForecasts[category] = [];
+    }
+    groupedForecasts[category].push(forecast);
+  });
+
+  const result = Object.entries(groupedForecasts).map(
+    ([category, forecasts]) => ({
+      category,
+      forecasts,
+      forecastSum: sumByKey(forecasts, 'forecast'),
+      percentage: sumByKey(forecasts, 'forecast') / total,
+    })
+  );
+
+  return result;
+}
+
+export function getBarData(forecasts: Forecast[]) {
+  const total = sumByKey(forecasts, 'forecast');
+  return forecasts
+    .map((forecast) => {
+      return {
+        ...forecast,
+        forecast: Number(forecast.forecast),
+        percentage: Number(forecast.forecast) / total,
+      };
+    })
+    .sort((a, b) => b.forecast - a.forecast);
+}
