@@ -8,6 +8,8 @@ const load = async () => {
     console.log('Deleted records in event table');
     await prisma.forecast.deleteMany();
     console.log('Deleted records in forecast table');
+    await prisma.period.deleteMany();
+    console.log('Deleted records in period table');
     await prisma.$queryRaw`ALTER TABLE Forecast AUTO_INCREMENT = 1`;
     console.log('reset forecast auto increment to 1');
     await prisma.forecast.createMany({
